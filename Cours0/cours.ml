@@ -68,3 +68,31 @@ let calculator (input_one : int) (input_two : int) : int =
   let x= input_one*input_two in 
       x;;
 print_int (calculator 5 5 );;
+
+
+
+
+(* Ce le match corssepond à la Switch case ( conditional statement ) dans C,php....  *)
+(* Deux type de Match peuvent etre : *)
+(* Premier match : un match exhaustive qui traite tout les cas possible  de la variable que on veut faire le matching *)
+(* Deuxième match : un match non exhaustive qui ne traite pas tout les cas possible de la variable que on veut faire le matching *)
+
+(* Exemple de match exhaustive *)
+let is_it_Two (x : int ) : string =
+  match  x with
+  | 2 -> "There's two ! "
+  | _ -> "This is not two !!!!";; (*Le underscore signifie tout le reste de cas possible que x peut prendre 0,1,3,4,5,6,...........*)
+
+  print_string (is_it_Two 5);;
+  
+
+  (*Exemple de match non exhaustive *)
+
+  let is_it_Three (x:int) : string =
+      match x with
+      | 0 -> "false"
+      | 3 -> "True";;
+
+      (*Cela va engendrer un erreur car 5 est un cas pas traité é *)
+      print_string ( is_it_Three 5 );;
+
