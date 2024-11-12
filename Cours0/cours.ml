@@ -15,6 +15,10 @@ print_endline "Speed";; (*Affiche la chaine de caractère et fait un saut à la 
 (* Lire une valeur au clavier *)
 let plus2 = read_int()+2;;
 
+(*Lire et afficher une chaine de caractere *)
+let chaine=read_line();;
+print_endline chaine;;
+
 
 (* Variables *)
 let x = 105;;
@@ -48,3 +52,19 @@ calculer(5,3);;
 (*Fonction qui prend un unit en argument et retorune un unit *)
 let afficher_message () =
   print_endline "Hello, world!";;
+
+(* Fonction *)
+  let calculator (input_one : int) (input_two : int) : int =
+    input_one*input_two;;
+    
+    print_int (calculator 5 5 );;
+
+
+
+
+    
+let calculator (input_one : int) (input_two : int) : int =
+  (*Gérer le Scoop , toujours lorsque on utilise une variable dans une fonction on la mets dans in *)
+  let x= input_one*input_two in 
+      x;;
+print_int (calculator 5 5 );;
