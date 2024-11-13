@@ -126,3 +126,5 @@ print_int (sum y );;
 
 
 
+(* Les tableaux et les listes sont deux structures différents en Ocaml  *)
+
