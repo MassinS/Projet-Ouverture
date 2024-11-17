@@ -88,4 +88,3 @@ Printf.printf "Le produit de deux polynome : \n";;
 let result1 = poly_prod polynome1 polynome2;;
 List.iter (fun m -> Printf.printf "Coeff: %d, Puiss: %d\n" m.coeff m.puiss) result1;;
 
-

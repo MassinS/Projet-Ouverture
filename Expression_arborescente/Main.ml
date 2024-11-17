@@ -103,3 +103,10 @@ let tree =
         List.iter (fun m -> Printf.printf "{ coeff = %d; puiss = %d }\n" m.coeff m.puiss) poly
   
   
+
+
+
+
+        
+
+        

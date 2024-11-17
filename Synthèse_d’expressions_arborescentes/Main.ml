@@ -125,4 +125,5 @@ let rec gen_arb arbre =
         | ("^", _, _) -> Node("^", [gen_arb g] @ [gen_arb d])
         | _ -> Node(x, []);;
 
+          
         
