@@ -13,7 +13,6 @@ let rec supp_indice_ele l n =
       let (nouveau_l1, element_supprimer) = supp_indice_ele l1 random_ele in
       (nouveau_l1, element_supprimer :: l2);;
 
-
 (*question 1.9*)
 let  gen_permutation n =
 let rec generation n =
@@ -48,14 +47,12 @@ let rec abr liste arbre =(*fonction principale qui construit un arbre a partir d
    | [] -> arbre
    | x::xs -> abr xs (inserer x arbre);;
 
-
-   (*question 1.11*)
+(*question 1.11*)
 let rec taille arbre =
   match arbre with
   | Vide -> 0
   | Noeud(x,g,d) -> 1 + taille g + taille d
 ;; (*j'aurai besoin de cette fonction pour savoir a ce que un sous arbre est une feuille ou non*) 
-
 
 let rec etiquetage arbre =
   match arbre with
@@ -79,15 +76,53 @@ let rec etiquetage arbre =
         Noeud("*", etiquetage g, etiquetage d)
       ;;
 
-
 (*question 1.12*)
-let rec gen_arb arbre =
-  match arbre with
-  | Vide -> ""
-  | Noeud(x, g, d) ->
-      match x with
-      | "+" -> "(" ^ gen_arb g ^ "+" ^ gen_arb d ^ ")"
-      | "*" -> "(" ^ gen_arb g ^ "*" ^ gen_arb d ^ ")"
-      | "^" -> "(" ^ gen_arb g ^ "^" ^ gen_arb d ^ ")"
-      | _ -> x (*cas d'un entier ou une variable x on retourne le contenu directement*)
+type 'a btree =
+  | Empty
+  | Node of 'a * 'a btree list ;;
+  (*on aura besoin de cette structure car cette derniere  vérifie la grammaire stipulée dans la section 1.2*)
+  let gauche_arbre arbre =
+    match arbre with
+    | Vide -> ("", Vide, Vide)
+    | Noeud(_, g, _) -> (
+        match g with
+        | Vide -> ("", Vide, Vide)
+        | Noeud(xg, gg, gd) -> (xg, gg, gd)
+      );;
+  
+
+      let droite_arbre arbre =
+        match arbre with
+        | Vide -> ("", Vide, Vide)
+        | Noeud(_, _, d) -> (
+            match d with
+            | Vide -> ("", Vide, Vide)
+            | Noeud(xd, dg, dd) -> (xd, dg, dd)
+          );;
       
+
+(*ces fonctions me permet de savoir la valeur des sous-arbre pour savoir comment proceder s'il s'agit d'un + successive .... ect*)
+
+let rec gen_arb arbre =
+    match arbre with
+    | Vide -> Empty
+    | Noeud(x, g, d) ->
+        let (element_g, gg, gd) = gauche_arbre arbre
+        and (element_d, dg, dd) = droite_arbre arbre in
+        match (x, element_g, element_d) with
+        | ("+","+", "+") -> Node("+", [gen_arb gg] @ [gen_arb gd] @ [gen_arb dg] @ [gen_arb dd])
+        | ("+","+", _) -> Node("+", [gen_arb gg] @ [gen_arb gd] @ [gen_arb d])
+        | ("+",_,"+") -> Node("+", [gen_arb g] @ [gen_arb dg] @ [gen_arb dd])
+        | ("+","x",_)-> Node("+",[Node("^", [Node("x", []); Node("1", [])  ])] @ [gen_arb d])
+        | ("+",_,"x")-> Node("+",[gen_arb g] @ [Node("^", [Node("x", []); Node("1", [])  ])])
+        | ("+", _, _) -> Node("+", [gen_arb g] @ [gen_arb d])
+        | ("*", "*", "*") -> Node("*", [gen_arb gg] @ [gen_arb gd] @ [gen_arb dg] @ [gen_arb dd])
+        | ("*", "*", _) -> Node("*", [gen_arb gg] @ [gen_arb gd] @ [gen_arb d])
+        | ("*", _, "*") -> Node("*", [gen_arb g] @ [gen_arb dg] @ [gen_arb dd])
+        | ("*","x",_)-> Node("*",[Node("^", [Node("x", []); Node("1", [])  ])] @ [gen_arb d])
+        | ("*",_,"x")-> Node("*",[gen_arb g] @ [Node("^", [Node("x", []); Node("1", [])  ])])
+        | ("*", _, _) -> Node("*", [gen_arb g] @ [gen_arb d])
+        | ("^", _, _) -> Node("^", [gen_arb g] @ [gen_arb d])
+        | _ -> Node(x, []);;
+
+        
