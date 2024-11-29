@@ -54,13 +54,13 @@ let rec abr liste arbre =(*fonction principale qui construit un arbre a partir d
 let rec taille arbre =
   match arbre with
   | Vide -> 0
-  | Noeud(x,g,d) -> 1 + taille g + taille d
+  | Noeud(_,g,d) -> 1 + taille g + taille d
 ;; (*j'aurai besoin de cette fonction pour savoir a ce que un sous arbre est une feuille ou non*) 
 
 let rec etiquetage arbre =
   match arbre with
   | Vide -> Vide
-  | Noeud(x, Vide, Vide) ->
+  | Noeud(_, Vide, Vide) ->
       if Random.bool() then
         Noeud("x", Vide, Vide)
       else

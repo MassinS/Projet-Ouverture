@@ -1,9 +1,8 @@
-open Sys;;
 open Main1;;
 open Main2;;
 open Main3;;
 
-(***********************************************************************************************************)
+(****************************************cle*******************************************************************)
 (*Question 2.13*)
 
 (* Fonction pour générer un ABR de taille 20 avec des valeurs aléatoires *)
@@ -177,7 +176,7 @@ let tailles = 1 :: List.init 14 (fun i -> 1 lsl i);;
 
 let generateurs_arbre tailles =
   List.map (fun taille ->
-    let permutation = List.map (fun x -> Random.int 1000) (gen_permutation taille |> snd) in
+    let permutation = List.map (fun _ -> Random.int 1000) (gen_permutation taille |> snd) in
     abr permutation Vide
   ) tailles;;
 
@@ -187,7 +186,7 @@ let arbres_transf = List.map gen_arb arbres_etiq;;
 
 (*Question 2.17*)
 
-let mesure_temps_somme15_strategie somme_arbres_strategie n =
+let mesure_temps_somme15_strategie somme_arbres_strategie _ =
   let arbres = arbres_transf in
   let start_time = Sys.time () in
   let _ = somme_arbres_strategie arbres in
@@ -219,7 +218,7 @@ let () =
 ;;
 
 (*Question 2.18*)
-let mesure_temps_produit15_strategie produit_arbres_strategie n =
+let mesure_temps_produit15_strategie produit_arbres_strategie _ =
   let arbres = arbres_transf in
   let start_time = Sys.time () in
   let _ = produit_arbres_strategie arbres in

@@ -1,9 +1,8 @@
-open Sys;;
 open Main1;;
 open Main2;;
 open Main3;;
 
-(***********************************************************************************************************)
+(****************************************cle*******************************************************************)
 (*Question 2.13*)
 
 (* Fonction pour générer un ABR de taille 20 avec des valeurs aléatoires *)
@@ -86,27 +85,73 @@ let mesure_temps_somme_strategie somme_arbres_strategie n =
 ;;
 
 
-(*teste*)
+(* Fonction pour générer les données *)
+let genere_data somme_arbres_strategie ns =
+  List.map
+    (fun n ->
+      let execution_time = mesure_temps_somme_strategie somme_arbres_strategie n in
+      (n, execution_time)
+    )
+    ns
+;;
+
+(* Générer les données pour chaque stratégie *)
 let () =
   Random.self_init ();
   let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
+
+  (* Stratégies et noms *)
   let strategies  = [
     ("Stratégie somme 1", somme_arbres_strategie1);
     ("Stratégie somme 2", somme_arbres_strategie2);
     ("Stratégie somme 3", somme_arbres_strategie3)
   ] in
+
+  (* Générer et afficher les données pour chaque stratégie *)
   List.iter
     (fun (nom, strategie) ->
       Printf.printf "==== %s ====\n" nom;
+      let data = genere_data strategie ns in
       List.iter
-        (fun n ->
-          let execution_time = mesure_temps_somme_strategie strategie n in
-          Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
+        (fun (n, time) ->
+          Printf.printf "n = %d, temps = %.6f secondes\n" n time
         )
-        ns
+        data;
+
+      (* Affichage ou stockage des données dans une variable *)
+      if nom = "Stratégie somme 1" then
+        let data1 = data in
+        Printf.printf "Data 1 : %s\n" (String.concat ", " (List.map (fun (n, t) -> Printf.sprintf "(%d, %.6f)" n t) data1))
+      else if nom = "Stratégie somme 2" then
+        let data2 = data in
+        Printf.printf "Data 2 : %s\n" (String.concat ", " (List.map (fun (n, t) -> Printf.sprintf "(%d, %.6f)" n t) data2))
+      else if nom = "Stratégie somme 3" then
+        let data3 = data in
+        Printf.printf "Data 3 : %s\n" (String.concat ", " (List.map (fun (n, t) -> Printf.sprintf "(%d, %.6f)" n t) data3))
     )
     strategies
 ;;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
   
 (*Question 2.15*)
@@ -249,3 +294,4 @@ let () =
     )
     strategies
 ;;
+

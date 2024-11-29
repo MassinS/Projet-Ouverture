@@ -79,6 +79,7 @@ let poly_prod (p1 : monome list ) ( p2 : monome list ) : monome list =
 let polynome1 = [   { coeff = 5; puiss = 1 };  { coeff = 3; puiss = 2 };  { coeff = 5; puiss = 1 }; { coeff = 5; puiss = 1 }; { coeff = 5; puiss = 1 }; { coeff = 5; puiss = 1 }; { coeff = 4; puiss = 5 }] ;;
 let polynome2 = [{ coeff = 7; puiss = 5 }; { coeff = 4; puiss = 2 }; { coeff = 1; puiss = 0 }; { coeff = 5; puiss = 1 } ; { coeff = 5; puiss = 1 }; { coeff = 5; puiss = 1 }; { coeff = 5; puiss = 1 }] ;;
 
+
 Printf.printf "La fusion de deux polynome : \n";;
 let result = poly_add polynome1 polynome2;;
 List.iter (fun m -> Printf.printf "Coeff: %d, Puiss: %d\n" m.coeff m.puiss) result;;
@@ -87,4 +88,3 @@ List.iter (fun m -> Printf.printf "Coeff: %d, Puiss: %d\n" m.coeff m.puiss) resu
 Printf.printf "Le produit de deux polynome : \n";;
 let result1 = poly_prod polynome1 polynome2;;
 List.iter (fun m -> Printf.printf "Coeff: %d, Puiss: %d\n" m.coeff m.puiss) result1;;
-
