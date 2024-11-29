@@ -1,0 +1,4 @@
+(library
+ (name main2)
+ (modules main2) ; Le module Main2 est dans ce fichier
+ (libraries main1)) ; Main2 dépend de main1

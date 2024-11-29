@@ -1,0 +1,7 @@
+(lang dune 3.16)
+(name Projet_Ocaml)
+(sections (lib .) (bin ../../bin) (doc ../../doc/Projet_Ocaml))
+(files
+ (lib (META dune-package opam))
+ (bin (Projet_Ocaml.exe))
+ (doc (README.md)))

@@ -1,0 +1,3 @@
+(executable
+ (name main4)
+ (libraries main1 main2 main3)) 

@@ -1,0 +1,5 @@
+(library
+ (name main3)
+  (modules main3) 
+ (libraries main2))
+ 
