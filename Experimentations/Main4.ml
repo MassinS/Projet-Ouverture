@@ -3,7 +3,7 @@ open Main1;;
 open Main2;;
 open Main3;;
 
-(***********************************************************************************************************)
+(**********************************************************************)
 (*Question 2.13*)
 
 (* Fonction pour générer un ABR de taille 20 avec des valeurs aléatoires *)
@@ -15,7 +15,6 @@ let gen_abr_taille_20 ()  =
       gen_abr_rec (taille - 1) (inserer valeur acc)
   in
   gen_abr_rec 20 Vide
-
 
 (* Fonction pour générer n ABR de taille 20, les transformer avec etiquetage et gen_arb *)
 let gen_n_abr n  =
@@ -39,14 +38,13 @@ let test_n_list n_list =
 
 (* Exemple d'utilisation avec la liste des tailles de n *)
 let n_list = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000]
-
 let () = test_n_list n_list
 
 (**********************************************************************)
 
 (*Question 2.14*)
 (*Strategie 1 : Conversion des arbres en polynômes puis addition globale *)
-let somme_arbres_strategie1 arbres   =
+let somme_arbres_strategie1 arbres =
   let polynomes = List.map arb2poly arbres in
   List.fold_left poly_add [] polynomes
 ;;
@@ -64,10 +62,7 @@ let somme_arbres_strategie2 arbres =
     arbres
 ;;
 
-
-(*Strategie 3*)
-
-(* Fusionner tous les arbres avant d'effectuer l'addition *)
+(*Strategie 3: Fusionner tous les arbres avant d'effectuer l'addition*)
 (* le principe est : Tous les arbres sont d'abord fusionnés en un seul polynôme (liste). La canonisation est appliquée ensuite pour simplifier le polynôme résultant.*)
 let somme_arbres_strategie3 arbres  =
   (* Fusionner les arbres en un seul arbre en utilisant une addition directe *)
@@ -77,10 +72,10 @@ let somme_arbres_strategie3 arbres  =
 
 
 (*Mesuring time*)
-let mesure_temps_somme_strategie somme_arbres_strategie n =
+let mesure_temps_n strategie n =
   let arbres = gen_n_abr n in
   let start_time = Sys.time () in
-  let _ = somme_arbres_strategie arbres in
+  let _ = strategie arbres in
   let end_time = Sys.time () in
   end_time -. start_time
 ;;
@@ -91,16 +86,16 @@ let () =
   Random.self_init ();
   let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
   let strategies  = [
-    ("Stratégie somme 1", somme_arbres_strategie1);
-    ("Stratégie somme 2", somme_arbres_strategie2);
-    ("Stratégie somme 3", somme_arbres_strategie3)
+    ("SommeN Stratégie 1", somme_arbres_strategie1);
+    ("SommeN Stratégie 2", somme_arbres_strategie2);
+    ("SommeN Stratégie 3", somme_arbres_strategie3)
   ] in
   List.iter
     (fun (nom, strategie) ->
       Printf.printf "==== %s ====\n" nom;
       List.iter
         (fun n ->
-          let execution_time = mesure_temps_somme_strategie strategie n in
+          let execution_time = mesure_temps_n strategie n in
           Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
         )
         ns
@@ -108,7 +103,7 @@ let () =
     strategies
 ;;
   
-  
+(**********************************************************************)
 (*Question 2.15*)
 (*Stratégie 1*)
 let produit_arbres_strategie1 arbres =
@@ -131,20 +126,9 @@ let produit_arbres_strategie2 arbres =
 (*Strategie 3*)
 
 let produit_arbres_strategie3 arbres =
-  let termes_fusionnes   =
-    List.fold_left (fun acc arbre -> arb2poly arbre @ acc) [] arbres
+  let termes_fusionnes = List.fold_left (fun acc arbre -> arb2poly arbre @ acc) [] arbres
   in
   polynome_canonique termes_fusionnes
-;;
-
-(*Mesuring time*)
-
-let mesure_temps_produit_strategie produit_arbres_strategie n =
-  let arbres = gen_n_abr n in
-  let start_time = Sys.time () in
-  let _ = produit_arbres_strategie arbres in
-  let end_time = Sys.time () in
-  end_time -. start_time
 ;;
 
 (*teste*)
@@ -152,16 +136,16 @@ let () =
   Random.self_init ();
   let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
   let strategies = [
-    ("Stratégie produit 1", produit_arbres_strategie1);
-    ("Stratégie produit 2", produit_arbres_strategie2);
-    ("Stratégie produit 3", produit_arbres_strategie3)
+    ("ProduitN Stratégie 1", produit_arbres_strategie1);
+    ("ProduitN Stratégie 2", produit_arbres_strategie2);
+    ("ProduitN Stratégie 3", produit_arbres_strategie3)
   ] in
   List.iter
     (fun (nom, strategie) ->
       Printf.printf "==== %s ====\n" nom;
       List.iter
         (fun n ->
-          let execution_time = mesure_temps_produit_strategie strategie n in
+          let execution_time = mesure_temps_n strategie n in
           Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
         )
         ns
@@ -169,7 +153,7 @@ let () =
     strategies
 ;;
 
-
+(**********************************************************************)
 (*Question 2.16*)
 
 (* Génération de 15 ABR de tailles spécifiques 1,1,2,4,8,...2^13 *)
@@ -181,71 +165,52 @@ let generateurs_arbre tailles =
     abr permutation Vide
   ) tailles;;
 
-  
 let arbres_etiq = List.map etiquetage (generateurs_arbre tailles);;
 let arbres_transf = List.map gen_arb arbres_etiq;;
 
+(**********************************************************************)
 (*Question 2.17*)
 
-let mesure_temps_somme15_strategie somme_arbres_strategie _ =
+let mesure_temps_15 strategie =
   let arbres = arbres_transf in
   let start_time = Sys.time () in
-  let _ = somme_arbres_strategie arbres in
+  let _ = strategie arbres in
   let end_time = Sys.time () in
   end_time -. start_time
 ;;
 
-
 (*teste*)
 let () =
   Random.self_init ();
-  let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
   let strategies = [
-    ("Stratégie somme15 1", somme_arbres_strategie1);
-    ("Stratégie somme15 2", somme_arbres_strategie2);
-    ("Stratégie somme15 3", somme_arbres_strategie3)
+    ("Somme15 Stratégie 1", somme_arbres_strategie1);
+    ("Somme15 Stratégie 2", somme_arbres_strategie2);
+    ("Somme15 Stratégie 3", somme_arbres_strategie3)
   ] in
   List.iter
     (fun (nom, strategie) ->
       Printf.printf "==== %s ====\n" nom;
-      List.iter
-        (fun n ->
-          let execution_time = mesure_temps_somme15_strategie strategie n in
-          Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
-        )
-        ns
+          let execution_time = mesure_temps_15 strategie in
+          Printf.printf "temps = %.6f secondes\n" execution_time;
     )
     strategies
 ;;
 
+(**********************************************************************)
 (*Question 2.18*)
-let mesure_temps_produit15_strategie produit_arbres_strategie _ =
-  let arbres = arbres_transf in
-  let start_time = Sys.time () in
-  let _ = produit_arbres_strategie arbres in
-  let end_time = Sys.time () in
-  end_time -. start_time
-;;
-
-
 (*teste*)
 let () =
   Random.self_init ();
-  let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
   let strategies = [
-    ("Stratégie produit15 1", produit_arbres_strategie1);
-    ("Stratégie produit15 2", produit_arbres_strategie2);
-    ("Stratégie produit15 3", produit_arbres_strategie3)
+    ("Produit15 Stratégie 1", produit_arbres_strategie1);
+    ("Produit15 Stratégie 2", produit_arbres_strategie2);
+    ("Produit15 Stratégie 3", produit_arbres_strategie3)
   ] in
   List.iter
     (fun (nom, strategie) ->
       Printf.printf "==== %s ====\n" nom;
-      List.iter
-        (fun n ->
-          let execution_time = mesure_temps_produit15_strategie strategie n in
-          Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
-        )
-        ns
+          let execution_time = mesure_temps_15 strategie in
+          Printf.printf "temps = %.6f secondes\n" execution_time;
     )
     strategies
 ;;
