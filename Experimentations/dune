@@ -1,3 +1,4 @@
-(executable
+(library
  (name main4)
+ (modules main4) 
  (libraries main1 main2 main3)) 

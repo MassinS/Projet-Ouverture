@@ -85,27 +85,7 @@ let mesure_temps_somme_strategie somme_arbres_strategie n =
 ;;
 
 
-(*teste*)
-let () =
-  Random.self_init ();
-  let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
-  let strategies  = [
-    ("Stratégie somme 1", somme_arbres_strategie1);
-    ("Stratégie somme 2", somme_arbres_strategie2);
-    ("Stratégie somme 3", somme_arbres_strategie3)
-  ] in
-  List.iter
-    (fun (nom, strategie) ->
-      Printf.printf "==== %s ====\n" nom;
-      List.iter
-        (fun n ->
-          let execution_time = mesure_temps_somme_strategie strategie n in
-          Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
-        )
-        ns
-    )
-    strategies
-;;
+
   
   
 (*Question 2.15*)
@@ -146,27 +126,6 @@ let mesure_temps_produit_strategie produit_arbres_strategie n =
   end_time -. start_time
 ;;
 
-(*teste*)
-let () =
-  Random.self_init ();
-  let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
-  let strategies = [
-    ("Stratégie produit 1", produit_arbres_strategie1);
-    ("Stratégie produit 2", produit_arbres_strategie2);
-    ("Stratégie produit 3", produit_arbres_strategie3)
-  ] in
-  List.iter
-    (fun (nom, strategie) ->
-      Printf.printf "==== %s ====\n" nom;
-      List.iter
-        (fun n ->
-          let execution_time = mesure_temps_produit_strategie strategie n in
-          Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
-        )
-        ns
-    )
-    strategies
-;;
 
 
 (*Question 2.16*)
@@ -195,6 +154,15 @@ let mesure_temps_somme15_strategie somme_arbres_strategie _ =
 ;;
 
 
+(*Question 2.18*)
+let mesure_temps_produit15_strategie produit_arbres_strategie _ =
+  let arbres = arbres_transf in
+  let start_time = Sys.time () in
+  let _ = produit_arbres_strategie arbres in
+  let end_time = Sys.time () in
+  end_time -. start_time
+;;
+
 (*teste*)
 let () =
   Random.self_init ();
@@ -217,34 +185,4 @@ let () =
     strategies
 ;;
 
-(*Question 2.18*)
-let mesure_temps_produit15_strategie produit_arbres_strategie _ =
-  let arbres = arbres_transf in
-  let start_time = Sys.time () in
-  let _ = produit_arbres_strategie arbres in
-  let end_time = Sys.time () in
-  end_time -. start_time
-;;
-
-
-(*teste*)
-let () =
-  Random.self_init ();
-  let ns = [100; 200; 300; 400; 500; 600; 700; 800; 900; 1000] in
-  let strategies = [
-    ("Stratégie produit15 1", produit_arbres_strategie1);
-    ("Stratégie produit15 2", produit_arbres_strategie2);
-    ("Stratégie produit15 3", produit_arbres_strategie3)
-  ] in
-  List.iter
-    (fun (nom, strategie) ->
-      Printf.printf "==== %s ====\n" nom;
-      List.iter
-        (fun n ->
-          let execution_time = mesure_temps_produit15_strategie strategie n in
-          Printf.printf "n = %d, temps = %.6f secondes\n" n execution_time;
-        )
-        ns
-    )
-    strategies
-;;
+ Printf.printf "==========================================================================\n";;
