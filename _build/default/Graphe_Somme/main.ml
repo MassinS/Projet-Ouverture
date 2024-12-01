@@ -9,7 +9,7 @@ let margin = 80 (* marge autour du graphique *)
 let genere__somme_data somme_arbres_strategie ns =
   List.map
     (fun n ->
-      let execution_time = mesure_temps_somme_strategie somme_arbres_strategie n in
+      let execution_time = mesure_temps_n somme_arbres_strategie n in
       (n, execution_time)
     )
     ns

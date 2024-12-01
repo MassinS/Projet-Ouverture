@@ -5,7 +5,7 @@ open Main4
 let genere_produit_data produit_arbres_strategie ns =
   List.map
     (fun n ->
-      let execution_time = mesure_temps_produit_strategie produit_arbres_strategie n in
+      let execution_time = mesure_temps_n produit_arbres_strategie n in
       (n, execution_time)
     )
     ns
