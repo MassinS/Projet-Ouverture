@@ -5,23 +5,13 @@ open Main3;;
 (****************************************cle*******************************************************************)
 (*Question 2.13*)
 
-(* Fonction pour générer un ABR de taille 20 avec des valeurs aléatoires *)
-let gen_abr_taille_20 ()  =
-  let rec gen_abr_rec taille acc =
-    if taille = 0 then acc
-    else
-      let valeur = Random.int 100 in
-      gen_abr_rec (taille - 1) (inserer valeur acc)
-  in
-  gen_abr_rec 20 Vide
-
-
 (* Fonction pour générer n ABR de taille 20, les transformer avec etiquetage et gen_arb *)
 let gen_n_abr n  =
   let rec gen_n_abr_rec n acc =
     if n = 0 then acc
     else
-      let arbre = gen_abr_taille_20 () in
+      let liste_permutee = snd (gen_permutation 20) in
+      let arbre = abr liste_permutee Vide in
       let arbre_etiquete  = etiquetage arbre in
       let arbre_transforme = gen_arb arbre_etiquete in
       gen_n_abr_rec (n - 1) (arbre_transforme :: acc)
@@ -74,11 +64,6 @@ let somme_arbres_strategie3 arbres  =
     arb2poly arbre @ acc  (* Ajouter chaque arbre sous forme de polynôme *)
   ) [] arbres
 
-
-
-
-  
-  
 (*Question 2.15*)
 (*Stratégie 1*)
 let produit_arbres_strategie1 arbres =
@@ -120,8 +105,6 @@ let mesure_temps_n strategie n =
   mesure_temps strategie arbres
 ;;
 
-
-
 (*-------------------------------------------------------------------------------------------------------------- *)
 (*Question 2.16*)
 
@@ -130,7 +113,7 @@ let tailles = 1 :: List.init 14 (fun i -> 1 lsl i);;
 
 let generateurs_arbre tailles =
   List.map (fun taille ->
-    let permutation = List.map (fun _ -> Random.int 1000) (gen_permutation taille |> snd) in
+    let permutation = (gen_permutation taille |> snd) in
     abr permutation Vide
   ) tailles;;
 
