@@ -10,11 +10,11 @@ let gen_n_abr n  =
   let rec gen_n_abr_rec n acc =
     if n = 0 then acc
     else
-      let liste_permutee = snd (gen_permutation 20) in
-      let arbre = abr liste_permutee Vide in
-      let arbre_etiquete  = etiquetage arbre in
-      let arbre_transforme = gen_arb arbre_etiquete in
-      gen_n_abr_rec (n - 1) (arbre_transforme :: acc)
+      let liste_permutee = snd (gen_permutation 20) in (* ça génere une liste de taile 20*)
+      let arbre = abr liste_permutee Vide in (* le transforme en arbre binaire*)
+      let arbre_etiquete  = etiquetage arbre in (* l'étiquetage de l'arbre*)
+      let arbre_transforme = gen_arb arbre_etiquete in (* transformation pour réspecter la grammaire*)
+      gen_n_abr_rec (n - 1) (arbre_transforme :: acc) (* géneration recursive des n abr de taille 20*)
   in
   gen_n_abr_rec n []
 
@@ -36,7 +36,7 @@ let () = test_n_list n_list
 (*Question 2.14*)
 (*Strategie 1 : Conversion des arbres en polynômes puis addition globale *)
 let somme_arbres_strategie1 arbres   =
-  let polynomes = List.map arb2poly arbres in
+  let polynomes = List.map arb2poly arbres in (* une liste polynomes où chaque élément est le polynôme correspondant à un arbre de la liste arbres*)
   List.fold_left poly_add [] polynomes
 ;;
 
@@ -60,9 +60,12 @@ let somme_arbres_strategie2 arbres =
 (* le principe est : Tous les arbres sont d'abord fusionnés en un seul polynôme (liste). La canonisation est appliquée ensuite pour simplifier le polynôme résultant.*)
 let somme_arbres_strategie3 arbres  =
   (* Fusionner les arbres en un seul arbre en utilisant une addition directe *)
-  List.fold_left (fun acc arbre -> 
-    arb2poly arbre @ acc  (* Ajouter chaque arbre sous forme de polynôme *)
+  let termes_fusionnes   =
+    List.fold_left (fun acc arbre -> arb2poly arbre @ acc  (* Ajouter chaque arbre sous forme de polynôme *)
   ) [] arbres
+  in
+  polynome_canonique termes_fusionnes
+;;
 
 (*Question 2.15*)
 (*Stratégie 1*)
