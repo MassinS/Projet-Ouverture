@@ -37,7 +37,7 @@ let () = test_n_list n_list
 (*Strategie 1 : Conversion des arbres en polynômes puis addition globale *)
 let somme_arbres_strategie1 arbres   =
   let polynomes = List.map arb2poly arbres in (* une liste polynomes où chaque élément est le polynôme correspondant à un arbre de la liste arbres*)
-  List.fold_left poly_add [] polynomes
+  List.fold_left poly_add [] polynomes (* on applique poly_add sur chaque element de la liste des polynôme*)
 ;;
 
 
@@ -89,11 +89,16 @@ let produit_arbres_strategie2 arbres =
 (*Strategie 3*)
 
 let produit_arbres_strategie3 arbres =
-  let termes_fusionnes   =
-    List.fold_left (fun acc arbre -> arb2poly arbre @ acc) [] arbres
+  let rec produit_intermediaire arbres cumul =
+    match arbres with
+    | [] -> cumul  (* Quand il n'y a plus d'arbres à traiter, on renvoie le résultat final *)
+    | arbre :: reste ->
+        let poly = arb2poly arbre in
+        let produit_partiel = poly_prod cumul poly in  (* On multiplie le polynôme cumulatif avec le polynôme de l'arbre courant *)
+        produit_intermediaire reste produit_partiel  (* On continue avec les arbres restants *)
   in
-  polynome_canonique termes_fusionnes
-;;
+  produit_intermediaire arbres [{coeff=1; puiss=0}]  (* Le polynôme initial est l'unité *)
+
 
 (*Mesuring time*)
 let mesure_temps strategie arbres =
