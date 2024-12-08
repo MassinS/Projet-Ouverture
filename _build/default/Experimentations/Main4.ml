@@ -5,26 +5,16 @@ open Main3;;
 (****************************************cle*******************************************************************)
 (*Question 2.13*)
 
-(* Fonction pour générer un ABR de taille 20 avec des valeurs aléatoires *)
-let gen_abr_taille_20 ()  =
-  let rec gen_abr_rec taille acc =
-    if taille = 0 then acc
-    else
-      let valeur = Random.int 100 in
-      gen_abr_rec (taille - 1) (inserer valeur acc)
-  in
-  gen_abr_rec 20 Vide
-
-
 (* Fonction pour générer n ABR de taille 20, les transformer avec etiquetage et gen_arb *)
 let gen_n_abr n  =
   let rec gen_n_abr_rec n acc =
     if n = 0 then acc
     else
-      let arbre = gen_abr_taille_20 () in
-      let arbre_etiquete  = etiquetage arbre in
-      let arbre_transforme = gen_arb arbre_etiquete in
-      gen_n_abr_rec (n - 1) (arbre_transforme :: acc)
+      let liste_permutee = snd (gen_permutation 20) in (* ça génere une liste de taile 20*)
+      let arbre = abr liste_permutee Vide in (* le transforme en arbre binaire*)
+      let arbre_etiquete  = etiquetage arbre in (* l'étiquetage de l'arbre*)
+      let arbre_transforme = gen_arb arbre_etiquete in (* transformation pour réspecter la grammaire*)
+      gen_n_abr_rec (n - 1) (arbre_transforme :: acc) (* géneration recursive des n abr de taille 20*)
   in
   gen_n_abr_rec n []
 
@@ -46,8 +36,8 @@ let () = test_n_list n_list
 (*Question 2.14*)
 (*Strategie 1 : Conversion des arbres en polynômes puis addition globale *)
 let somme_arbres_strategie1 arbres   =
-  let polynomes = List.map arb2poly arbres in
-  List.fold_left poly_add [] polynomes
+  let polynomes = List.map arb2poly arbres in (* une liste polynomes où chaque élément est le polynôme correspondant à un arbre de la liste arbres*)
+  List.fold_left poly_add [] polynomes (* on applique poly_add sur chaque element de la liste des polynôme*)
 ;;
 
 
@@ -70,15 +60,13 @@ let somme_arbres_strategie2 arbres =
 (* le principe est : Tous les arbres sont d'abord fusionnés en un seul polynôme (liste). La canonisation est appliquée ensuite pour simplifier le polynôme résultant.*)
 let somme_arbres_strategie3 arbres  =
   (* Fusionner les arbres en un seul arbre en utilisant une addition directe *)
-  List.fold_left (fun acc arbre -> 
-    arb2poly arbre @ acc  (* Ajouter chaque arbre sous forme de polynôme *)
+  let termes_fusionnes   =
+    List.fold_left (fun acc arbre -> arb2poly arbre @ acc  (* Ajouter chaque arbre sous forme de polynôme *)
   ) [] arbres
+  in
+  polynome_canonique termes_fusionnes
+;;
 
-
-
-
-  
-  
 (*Question 2.15*)
 (*Stratégie 1*)
 let produit_arbres_strategie1 arbres =
@@ -101,11 +89,16 @@ let produit_arbres_strategie2 arbres =
 (*Strategie 3*)
 
 let produit_arbres_strategie3 arbres =
-  let termes_fusionnes   =
-    List.fold_left (fun acc arbre -> arb2poly arbre @ acc) [] arbres
+  let rec produit_intermediaire arbres cumul =
+    match arbres with
+    | [] -> cumul  (* Quand il n'y a plus d'arbres à traiter, on renvoie le résultat final *)
+    | arbre :: reste ->
+        let poly = arb2poly arbre in
+        let produit_partiel = poly_prod cumul poly in  (* On multiplie le polynôme cumulatif avec le polynôme de l'arbre courant *)
+        produit_intermediaire reste produit_partiel  (* On continue avec les arbres restants *)
   in
-  polynome_canonique termes_fusionnes
-;;
+  produit_intermediaire arbres [{coeff=1; puiss=0}]  (* Le polynôme initial est l'unité *)
+
 
 (*Mesuring time*)
 let mesure_temps strategie arbres =
@@ -120,8 +113,6 @@ let mesure_temps_n strategie n =
   mesure_temps strategie arbres
 ;;
 
-
-
 (*-------------------------------------------------------------------------------------------------------------- *)
 (*Question 2.16*)
 
@@ -130,7 +121,7 @@ let tailles = 1 :: List.init 14 (fun i -> 1 lsl i);;
 
 let generateurs_arbre tailles =
   List.map (fun taille ->
-    let permutation = List.map (fun _ -> Random.int 1000) (gen_permutation taille |> snd) in
+    let permutation = (gen_permutation taille |> snd) in
     abr permutation Vide
   ) tailles;;
 

@@ -2,10 +2,10 @@ open Graphics
 open Main4
 
 (* Dimensions du graphique *)
-let width = 1300
-let height = 800
-let margin = 80 (* marge autour du graphique *)
-
+let width = 1600
+let height = 1000
+let margin = 100 (* marge autour du graphique *)
+ 
 let genere__somme_data somme_arbres_strategie ns =
   List.map
     (fun n ->
@@ -14,11 +14,6 @@ let genere__somme_data somme_arbres_strategie ns =
     )
     ns
 ;;
-
-
-
-
-
 
 (* Initialisation de la fenêtre *)
 let () = open_graph (Printf.sprintf " %dx%d" width height)
@@ -29,19 +24,16 @@ let draw_axes () =
   moveto margin margin;
   lineto margin (height - margin); (* Axe Y *)
   moveto margin margin;
-  lineto (width - margin) margin (* Axe X *)
+  lineto (width - margin ) margin (* Axe X, rendu plus long de 50 unités *)
 ;;
 
+
 (* Dessiner le graphique *)
-let draw_graph data color =
-  (* Déterminer les limites des axes *)
-  let max_n = List.fold_left (fun acc (n, _) -> max acc n) 0 data in
-  let max_temps = List.fold_left (fun acc (_, t) -> max acc t) 0.0 data in
-
+let draw_graph data color max_n max_temps =
   (* Fonctions de transformation des coordonnées *)
-  let scale_x n = margin + (n * (width - 2 * margin)) / max_n in
+  let scale_x n = margin + (n * (width - 2 * margin - 100 )) / max_n in
   let scale_y t = margin + int_of_float (t *. float_of_int (height - 2 * margin) /. max_temps) in
-
+  
   (* Dessiner les points *)
   let rec draw_points = function
     | [] | [_] -> () (* Rien à faire si 0 ou 1 point *)
@@ -62,13 +54,13 @@ let draw_graph data color =
     fill_circle x y 3;
     set_color black;
     moveto (x + 5) (y + 5);
-    draw_string (Printf.sprintf "(%d, %.3f)" n t);
+    draw_string (Printf.sprintf "(%d, %.6f)" n t);
   ) data
 ;;
 
 (* Ajouter une légende au graphique *)
 let draw_legend legend_items =
-  let legend_x = 100 in
+  let legend_x = 120 in
   let legend_y_start = height - margin - 30 in
   let line_height = 20 in
   List.iteri (fun i (color, text) ->
@@ -111,10 +103,14 @@ let data1, data2, data3 =
 
 (* Programme principal *)
 let () =
+  (* Trouver les max de n et temps pour ajuster les axes *)
+  let max_n = List.fold_left (fun acc (n, _) -> max acc n) 0 (List.flatten [data1; data2; data3]) in
+  let max_temps = List.fold_left (fun acc (_, t) -> max acc t) 0.0 (List.flatten [data1; data2; data3]) in
+  
   draw_axes ();
-  draw_graph data1 blue; (* Dessiner la stratégie 1 en bleu *)
-  draw_graph data2 green; (* Dessiner la stratégie 2 en vert *)
-  draw_graph data3 cyan; (* Dessiner la stratégie 3 en cyan *)
+  draw_graph data1 blue max_n max_temps; (* Dessiner la stratégie 1 en bleu *)
+  draw_graph data2 green max_n max_temps; (* Dessiner la stratégie 2 en vert *)
+  draw_graph data3 cyan max_n max_temps; (* Dessiner la stratégie 3 en cyan *)
 
   draw_legend [
     (blue, "Strategie somme 1");
