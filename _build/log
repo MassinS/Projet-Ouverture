@@ -1,4 +1,4 @@
-# C:\Users\DELL\AppData\Local\opam\default\bin\dune.exe exec Graphe_Somme/main.exe
+# C:\Users\DELL\AppData\Local\opam\default\bin\dune.exe exec Graphe_Produit/main.exe
 # OCAMLPARAM: unset
 # Shared cache: disabled
 # Shared cache location:
@@ -14,4 +14,4 @@
 #  ; build_dir = In_build_dir "default"
 #  ; instrument_with = []
 #  }
-$ C:\Users\DELL\AppData\Local\opam\default\bin\ocamlc.opt.exe -config > C:\Users\DELL\AppData\Local\Temp\dune_066920_output
+$ C:\Users\DELL\AppData\Local\opam\default\bin\ocamlc.opt.exe -config > C:\Users\DELL\AppData\Local\Temp\dune_b530ae_output

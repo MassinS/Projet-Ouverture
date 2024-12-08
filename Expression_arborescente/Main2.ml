@@ -72,7 +72,7 @@ let tree =
       )
 
 
-      (*La fonction arb2poly transforme l'expression arborescente et la transformant en un polynôme canonique. *)
+      (*La fonction arb2poly transforme l'expression arborescente en un polynome  et transformant le polynome en un polynôme canonique. *)
       let arb2poly tree =
         polynome_canonique (arb2monomes tree)
 
